@@ -24,8 +24,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Premium Wedding Invitation",
-  description: "Join us for our special day",
+  title: "Mignone & Hamza | Wedding Invitation",
+  description: "Join us in Kigali to celebrate the wedding of Mignone & Hamza.",
 };
 
 export default function RootLayout({
@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${greatVibes.variable} ${cinzel.variable} ${playfair.variable} antialiased`}>
       <head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       </head>
       <body>
         {children}
