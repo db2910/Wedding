@@ -26,7 +26,7 @@ const profiles = [
     name: "Mignone",
     tagline: "Graceful, Radiant & Full of Light",
     bio: "A lover of sunsets, great music, and meaningful conversations. Mignone brings warmth into every room she enters and light into every heart she touches.",
-    photo: "/bride.jpeg",
+    photo: "/Bride.jpeg",
     accent: "border-sage/30",
     accentBg: "from-sage/5 to-transparent",
   },
