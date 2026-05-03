@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const WEDDING_DATE = new Date("2026-08-16T15:00:00");
+const WEDDING_DATE = new Date("2026-08-16T08:00:00");
 
 function getTimeLeft() {
   const now = new Date();
@@ -118,7 +118,7 @@ export default function Hero() {
             </div>
           </div>
           <div className="mt-3 md:mt-5 flex flex-col items-center gap-0.5">
-            <p className="text-white font-serif text-xs md:text-sm tracking-[0.35em] uppercase">Sunday · 3:00 PM</p>
+            <p className="text-white font-serif text-xs md:text-sm tracking-[0.35em] uppercase">Sunday · 8:00 AM</p>
             <p className="text-gold/70 text-[9px] md:text-[10px] tracking-[0.15em] uppercase font-light">Golden Garden Rebero · Kigali</p>
           </div>
         </motion.div>
