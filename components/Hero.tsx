@@ -20,12 +20,12 @@ function getTimeLeft() {
 function CountUnit({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center">
-      <div className="glass rounded-xl px-5 py-4 md:px-8 md:py-6 min-w-[70px] md:min-w-[100px]">
-        <span className="font-serif text-4xl md:text-6xl text-white block text-center leading-none drop-shadow-md">
+      <div className="glass rounded-xl px-3 py-3 md:px-8 md:py-6 min-w-[60px] md:min-w-[100px]">
+        <span className="font-serif text-3xl md:text-6xl text-white block text-center leading-none drop-shadow-md">
           {String(value).padStart(2, "0")}
         </span>
       </div>
-      <span className="mt-3 text-[11px] md:text-sm uppercase tracking-[0.25em] text-white/80 drop-shadow-sm font-medium">
+      <span className="mt-2 text-[9px] md:text-sm uppercase tracking-[0.25em] text-white/80 drop-shadow-sm font-medium text-center">
         {label}
       </span>
     </div>
@@ -128,7 +128,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2 }}
-          className="flex items-start gap-2 md:gap-6 justify-center"
+          className="flex items-start gap-1 md:gap-6 justify-center"
         >
           <CountUnit value={timeLeft.days} label="Days" />
           <span className="text-white/40 text-xl md:text-3xl mt-3 md:mt-5 font-light">:</span>
