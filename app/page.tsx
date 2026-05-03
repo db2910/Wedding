@@ -37,13 +37,6 @@ export default function Home() {
             {/* ── Hero ── */}
             <Hero />
 
-            {/* Hero → The Couple: angled geometric cut */}
-            <SectionDivider
-              variant="diamond"
-              topColor="#000000"
-              bottomColor="#f0ede4"
-            />
-
             {/* ── The Couple ── */}
             <TheCouple />
 
