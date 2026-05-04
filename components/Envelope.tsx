@@ -8,6 +8,7 @@ type Phase = "idle" | "opening" | "raised" | "exit";
 export default function Envelope({ onOpen }: { onOpen: () => void }) {
   const [phase, setPhase] = useState<Phase>("idle");
   const [mounted, setMounted] = useState(false);
+  const [scale, setScale] = useState(1);
   const [randomElements, setRandomElements] = useState<{
     particles: Array<{width: number, height: number, left: string, top: string, bg: string, delay: number, duration: number}>;
     heartsData: Array<{id: number, x: number, delay: number, duration: number, size: number, rotate: number}>;
@@ -15,9 +16,10 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
 
   useEffect(() => {
     setMounted(true);
+    
     // Generate random values only on the client to prevent hydration errors
     setRandomElements({
-      particles: Array.from({ length: 60 }).map(() => ({ // Increased from 40 to 60 for a livelier background
+      particles: Array.from({ length: 60 }).map(() => ({
         width: Math.random() * 4 + 1.5,
         height: Math.random() * 4 + 1.5,
         left: `${Math.random() * 100}%`,
@@ -26,21 +28,33 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
         delay: Math.random() * 4,
         duration: 2 + Math.random() * 3,
       })),
-      heartsData: Array.from({ length: 24 }).map((_, i) => ({ // Increased count and size
+      heartsData: Array.from({ length: 24 }).map((_, i) => ({
         id: i,
         x: Math.random() * 100,
         delay: Math.random() * 5,
         duration: 5 + Math.random() * 5,
-        size: 14 + Math.random() * 18, // Bigger hearts
+        size: 14 + Math.random() * 18,
         rotate: Math.random() * 360,
       })),
     });
+
+    const handleResize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      // Calculate scale based on width (max 420px) and height (ensure rise fits)
+      const scaleW = Math.min(1, (width * 0.85) / 420);
+      const scaleH = Math.min(1, (height * 0.7) / 540); // 300px + 240px rise
+      setScale(Math.min(scaleW, scaleH));
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const handleEnvelopeClick = () => {
     if (phase !== "idle") return;
     
-    // Direct play call in the click handler (guarantees browser allows it)
     const audio = (window as any).weddingAudio;
     if (audio) {
       audio.muted = false;
@@ -48,14 +62,10 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
       audio.play().catch(() => {});
     }
     
-    // Dispatch event to update the music button UI
     window.dispatchEvent(new Event("playMusic"));
     
-    // Phase 1: flap folds open (900ms)
     setPhase("opening");
-    // Phase 2: card rises AFTER flap is clear (1200ms later)
     setTimeout(() => setPhase("raised"), 1200);
-    // Phase 3: auto-transition to main site
     setTimeout(() => setPhase("exit"), 2600);
     setTimeout(onOpen, 3500);
   };
@@ -65,7 +75,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
       {phase !== "exit" && (
         <motion.div
           key="envelope-screen"
-          className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden"
           style={{
             background:
               "radial-gradient(ellipse at 55% 45%, #f0ede4 0%, #e8e2d4 40%, #d8d0c0 100%)",
@@ -97,7 +107,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
             ))}
           </div>
 
-          {/* Floating hearts — sage/gold tones */}
+          {/* Floating hearts */}
           {mounted && randomElements.heartsData.map((p) => (
             <motion.div
               key={`heart-${p.id}`}
@@ -124,13 +134,12 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               }}
             >
               <svg viewBox="0 0 32 29.6" fill="#8da38d">
-                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
-	c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2 c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
               </svg>
             </motion.div>
           ))}
 
-          {/* Corner ornaments — gold on cream */}
+          {/* Corner ornaments */}
           {["top-6 left-6", "top-6 right-6", "bottom-6 left-6", "bottom-6 right-6"].map((pos, i) => (
             <div key={`ornament-${i}`} className={`absolute ${pos} w-14 h-14 opacity-20 pointer-events-none`}>
               <svg viewBox="0 0 64 64" className="w-full h-full" fill="none" stroke="#c5a059" strokeWidth="1">
@@ -148,12 +157,18 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
           </div>
 
           {/* ═══ ENVELOPE SCENE ═══ */}
-          <div
+          <motion.div
             className="relative select-none cursor-pointer group"
-            style={{ width: 420, height: 300 }}
+            style={{ 
+              width: 420, 
+              height: 300,
+              scale: scale,
+            }}
             onClick={handleEnvelopeClick}
+            initial={false}
+            animate={{ scale: scale }}
           >
-            {/* Pulsing effect to make it look clickable and lively */}
+            {/* Pulsing effect */}
             <motion.div
               className="absolute inset-0 rounded-[6px] bg-[#c5a059]/20"
               style={{ zIndex: -1 }}
@@ -161,13 +176,13 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
 
-            {/* ── ENVELOPE BODY (z-0) ── sage green gradient */}
+            {/* Envelope body */}
             <div
               className="absolute inset-0 rounded-[6px] shadow-[0_24px_70px_rgba(0,0,0,0.2)] transition-transform duration-500 group-hover:scale-[1.01]"
               style={{ background: "linear-gradient(145deg, #7a9a84 0%, #5a7a64 100%)", zIndex: 0 }}
             />
 
-            {/* Inner lining triangles — darker sage */}
+            {/* Inner lining */}
             <div
               className="absolute inset-0 rounded-[6px] pointer-events-none transition-transform duration-500 group-hover:scale-[1.01]"
               style={{
@@ -178,7 +193,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               }}
             />
 
-            {/* Side flaps — subtle sage shadow */}
+            {/* Side flaps */}
             <div
               className="absolute inset-0 rounded-[6px] pointer-events-none transition-transform duration-500 group-hover:scale-[1.01]"
               style={{
@@ -199,7 +214,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               }}
             />
 
-            {/* Decorative envelope gold lines */}
+            {/* Decorative lines */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-[6px] transition-transform duration-500 group-hover:scale-[1.01]" style={{ zIndex: 3 }}>
               <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 420 300" fill="none">
                 <line x1="0" y1="0" x2="210" y2="162" stroke="#c5a059" strokeWidth="0.5" />
@@ -209,7 +224,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               </svg>
             </div>
 
-            {/* ── CARD (z-10) — cream invitation card ── */}
+            {/* ── CARD (z-10) ── */}
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={
@@ -231,26 +246,26 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               {["top-3 left-3", "top-3 right-3", "bottom-3 left-3", "bottom-3 right-3"].map((pos, i) => (
                 <div key={`star-${i}`} className={`absolute ${pos} text-[#c5a059]/40 text-xl leading-none pointer-events-none select-none`}>✦</div>
               ))}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-8 text-center">
-                <p className="font-serif text-[8px] tracking-[0.35em] uppercase text-[#c5a059]/60">Together with their families</p>
-                <div className="w-10 h-px bg-[#c5a059]/30" />
-                <p className="font-serif text-[8px] tracking-[0.25em] uppercase text-[#7a9a84]/60">invite you to the wedding of</p>
-                <p className="script-text text-[40px] text-[#4a7561] leading-none mt-1">Mignone</p>
-                <p className="font-serif text-[#c5a059]/55 text-sm tracking-widest">&</p>
-                <p className="script-text text-[40px] text-[#4a7561] leading-none mb-1">Hamza</p>
-                <div className="w-10 h-px bg-[#c5a059]/30" />
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="font-serif text-[14px] text-[#4a7561]/70">16</span>
-                  <span className="text-[#c5a059]/40 text-[10px]">/</span>
-                  <span className="font-serif text-[14px] text-[#4a7561]/70">08</span>
-                  <span className="text-[#c5a059]/40 text-[10px]">/</span>
-                  <span className="font-serif text-[14px] text-[#4a7561]/70">26</span>
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-[6px] px-12 py-8 text-center">
+                <p className="font-serif text-[7px] tracking-[0.35em] uppercase text-[#c5a059]/60">Together with their families</p>
+                <div className="w-10 h-px bg-[#c5a059]/30 my-[2px]" />
+                <p className="font-serif text-[7px] tracking-[0.25em] uppercase text-[#7a9a84]/60">invite you to the wedding of</p>
+                <p className="script-text text-[32px] text-[#4a7561] leading-none mt-1">Mignone</p>
+                <p className="font-serif text-[#c5a059]/55 text-xs tracking-widest">&</p>
+                <p className="script-text text-[32px] text-[#4a7561] leading-none mb-1">Hamza</p>
+                <div className="w-10 h-px bg-[#c5a059]/30 my-[2px]" />
+                <div className="flex items-center gap-2">
+                  <span className="font-serif text-[12px] text-[#4a7561]/70">16</span>
+                  <span className="text-[#c5a059]/40 text-[9px]">/</span>
+                  <span className="font-serif text-[12px] text-[#4a7561]/70">08</span>
+                  <span className="text-[#c5a059]/40 text-[9px]">/</span>
+                  <span className="font-serif text-[12px] text-[#4a7561]/70">26</span>
                 </div>
-                <p className="font-serif text-[7px] tracking-[0.15em] uppercase text-[#4a7561]/50">Golden Garden Rebero · Kigali</p>
+                <p className="font-serif text-[6px] tracking-[0.15em] uppercase text-[#4a7561]/50 max-w-[180px] mt-1">Golden Garden Rebero · Kigali</p>
               </div>
             </motion.div>
 
-            {/* ── TOP FLAP (z-5) — sage green flap ── */}
+            {/* ── TOP FLAP ── */}
             <motion.div
               className="absolute top-0 left-0 right-0 origin-top overflow-hidden transition-transform duration-500 group-hover:scale-[1.01]"
               style={{
@@ -277,7 +292,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               </svg>
             </motion.div>
 
-            {/* ── WAX SEAL (z-6) — gold seal ── */}
+            {/* ── WAX SEAL ── */}
             <motion.div
               className="absolute transition-transform duration-500 group-hover:scale-105"
               style={{ top: "42%", left: "50%", x: "-50%", y: "-50%", zIndex: 6 }}
@@ -291,7 +306,6 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               <div className="absolute inset-0 rounded-full bg-[#c5a059]/30 blur-[10px] scale-110" />
               <div className="w-[76px] h-[76px] rounded-full border-[3px] border-[#a08040] bg-gradient-to-br from-[#c5a059] to-[#9a7a3a] shadow-[0_6px_24px_rgba(160,128,64,0.5)] flex items-center justify-center">
                 <div className="w-[60px] h-[60px] rounded-full border border-[#f5d890]/40 flex items-center justify-center bg-gradient-to-br from-[#d4b870] to-[#b3914a]">
-                  {/* Changed typography to serif for a more elegant, modern look instead of script */}
                   <span className="font-serif italic text-white text-[22px] tracking-[0.1em] font-medium leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
                     M&H
                   </span>
@@ -318,9 +332,9 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
                 Open Your Invitation
               </p>
             </motion.div>
-          </div>
+          </motion.div>
 
-          {/* Couple names — fade in when card rises */}
+          {/* Couple names */}
           <AnimatePresence>
             {phase === "raised" && (
               <motion.div
