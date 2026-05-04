@@ -34,34 +34,24 @@ export default function RSVP() {
     setLoading(true);
 
     try {
-      const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
-      
-      if (scriptUrl) {
-        // Send data to Google Sheets via Google Apps Script
-        await fetch(scriptUrl, {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "text/plain",
-          },
-          body: JSON.stringify({
-            name: form.name,
-            email: form.email || "N/A",
-            phone: form.phone || "N/A",
-            guests: form.guests,
-            message: form.message || "N/A",
-            timestamp: new Date().toISOString(),
-          }),
-        });
-      } else {
-        // Fallback mock delay if no script URL is provided yet
-        await new Promise((r) => setTimeout(r, 1400));
-        console.log("Mock submitted data:", form);
-      }
-      
+      // Post to our own Next.js API route — no CORS issues
+      const res = await fetch("/api/rsvp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          guests: form.guests,
+          message: form.message,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Server error");
+
       setSubmitted(true);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("RSVP error:", error);
       alert("There was an error sending your RSVP. Please try again.");
     } finally {
       setLoading(false);
