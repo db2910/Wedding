@@ -1,22 +1,41 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-
-const PETAL_COUNT = 16;
-const petals = Array.from({ length: PETAL_COUNT }, (_, i) => ({
-  id: i,
-  x: Math.random() * 100,
-  delay: Math.random() * 4,
-  duration: 4 + Math.random() * 4,
-  size: 5 + Math.random() * 10,
-  rotate: Math.random() * 360,
-}));
+import { useState, useEffect } from "react";
 
 type Phase = "idle" | "opening" | "raised" | "exit";
 
 export default function Envelope({ onOpen }: { onOpen: () => void }) {
   const [phase, setPhase] = useState<Phase>("idle");
+  const [mounted, setMounted] = useState(false);
+  const [randomElements, setRandomElements] = useState<{
+    particles: Array<{width: number, height: number, left: string, top: string, bg: string, delay: number, duration: number}>;
+    heartsData: Array<{id: number, x: number, delay: number, duration: number, size: number, rotate: number}>;
+  }>({ particles: [], heartsData: [] });
+
+  useEffect(() => {
+    setMounted(true);
+    // Generate random values only on the client to prevent hydration errors
+    setRandomElements({
+      particles: Array.from({ length: 60 }).map(() => ({ // Increased from 40 to 60 for a livelier background
+        width: Math.random() * 4 + 1.5,
+        height: Math.random() * 4 + 1.5,
+        left: `${Math.random() * 100}%`,
+        top: `${Math.random() * 100}%`,
+        bg: `rgba(197, 160, 89, ${Math.random() * 0.4 + 0.15})`,
+        delay: Math.random() * 4,
+        duration: 2 + Math.random() * 3,
+      })),
+      heartsData: Array.from({ length: 24 }).map((_, i) => ({ // Increased count and size
+        id: i,
+        x: Math.random() * 100,
+        delay: Math.random() * 5,
+        duration: 5 + Math.random() * 5,
+        size: 14 + Math.random() * 18, // Bigger hearts
+        rotate: Math.random() * 360,
+      })),
+    });
+  }, []);
 
   const handleEnvelopeClick = () => {
     if (phase !== "idle") return;
@@ -49,39 +68,39 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
           className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
           style={{
             background:
-              "radial-gradient(ellipse at 55% 45%, #1a1a2e 0%, #16213e 45%, #0f3460 100%)",
+              "radial-gradient(ellipse at 55% 45%, #f0ede4 0%, #e8e2d4 40%, #d8d0c0 100%)",
           }}
           exit={{ opacity: 0, scale: 1.08, filter: "blur(24px)" }}
           transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
         >
-          {/* Star field */}
+          {/* Subtle gold shimmer particles */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            {Array.from({ length: 60 }).map((_, i) => (
+            {mounted && randomElements.particles.map((p, i) => (
               <motion.div
-                key={i}
-                className="absolute rounded-full bg-white"
+                key={`particle-${i}`}
+                className="absolute rounded-full"
                 style={{
-                  width: Math.random() * 2.5 + 0.5,
-                  height: Math.random() * 2.5 + 0.5,
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  opacity: Math.random() * 0.6 + 0.1,
+                  width: p.width,
+                  height: p.height,
+                  left: p.left,
+                  top: p.top,
+                  background: p.bg,
                 }}
-                animate={{ opacity: [null, 0.1, 0.8, 0.1] }}
+                animate={{ opacity: [0, 0.6, 0] }}
                 transition={{
-                  duration: 2 + Math.random() * 4,
+                  duration: p.duration,
                   repeat: Infinity,
-                  delay: Math.random() * 4,
+                  delay: p.delay,
                   ease: "easeInOut",
                 }}
               />
             ))}
           </div>
 
-          {/* Floating hearts */}
-          {petals.map((p) => (
+          {/* Floating hearts — sage/gold tones */}
+          {mounted && randomElements.heartsData.map((p) => (
             <motion.div
-              key={p.id}
+              key={`heart-${p.id}`}
               className="absolute pointer-events-none"
               style={{
                 left: `${p.x}%`,
@@ -89,11 +108,11 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
                 width: p.size,
                 height: p.size,
                 rotate: p.rotate,
-                opacity: 0.5,
+                opacity: 0,
               }}
               animate={{
                 y: ["0vh", "110vh"],
-                x: [0, (Math.random() - 0.5) * 100],
+                x: [0, (Math.random() - 0.5) * 150],
                 rotate: [p.rotate, p.rotate + 360],
                 opacity: [0, 0.6, 0.4, 0],
               }}
@@ -104,16 +123,16 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
                 ease: "linear",
               }}
             >
-              <svg viewBox="0 0 32 29.6" fill="#e8b4c8">
+              <svg viewBox="0 0 32 29.6" fill="#8da38d">
                 <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
 	c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
               </svg>
             </motion.div>
           ))}
 
-          {/* Corner ornaments */}
+          {/* Corner ornaments — gold on cream */}
           {["top-6 left-6", "top-6 right-6", "bottom-6 left-6", "bottom-6 right-6"].map((pos, i) => (
-            <div key={i} className={`absolute ${pos} w-14 h-14 opacity-25 pointer-events-none`}>
+            <div key={`ornament-${i}`} className={`absolute ${pos} w-14 h-14 opacity-20 pointer-events-none`}>
               <svg viewBox="0 0 64 64" className="w-full h-full" fill="none" stroke="#c5a059" strokeWidth="1">
                 {i === 0 && <path d="M0 20 L0 0 L20 0" />}
                 {i === 1 && <path d="M64 20 L64 0 L44 0" />}
@@ -123,35 +142,48 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
             </div>
           ))}
 
+          {/* Decorative botanical border circle */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-[500px] h-[500px] rounded-full border border-[#c5a059]/10" />
+          </div>
+
           {/* ═══ ENVELOPE SCENE ═══ */}
           <div
-            className="relative select-none cursor-pointer"
+            className="relative select-none cursor-pointer group"
             style={{ width: 420, height: 300 }}
             onClick={handleEnvelopeClick}
           >
-            {/* ── ENVELOPE BODY (z-0) ── */}
-            <div
-              className="absolute inset-0 rounded-[6px] shadow-[0_24px_70px_rgba(0,0,0,0.55)]"
-              style={{ background: "linear-gradient(145deg, #2d2545 0%, #1e1a35 100%)", zIndex: 0 }}
+            {/* Pulsing effect to make it look clickable and lively */}
+            <motion.div
+              className="absolute inset-0 rounded-[6px] bg-[#c5a059]/20"
+              style={{ zIndex: -1 }}
+              animate={phase === "idle" ? { scale: [1, 1.05, 1], opacity: [0.5, 0, 0.5] } : { opacity: 0 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
 
-            {/* Inner lining triangles */}
+            {/* ── ENVELOPE BODY (z-0) ── sage green gradient */}
             <div
-              className="absolute inset-0 rounded-[6px] pointer-events-none"
+              className="absolute inset-0 rounded-[6px] shadow-[0_24px_70px_rgba(0,0,0,0.2)] transition-transform duration-500 group-hover:scale-[1.01]"
+              style={{ background: "linear-gradient(145deg, #7a9a84 0%, #5a7a64 100%)", zIndex: 0 }}
+            />
+
+            {/* Inner lining triangles — darker sage */}
+            <div
+              className="absolute inset-0 rounded-[6px] pointer-events-none transition-transform duration-500 group-hover:scale-[1.01]"
               style={{
-                background: "linear-gradient(160deg, #3d3060 0%, #2a2050 100%)",
+                background: "linear-gradient(160deg, #6a8a74 0%, #4a6a54 100%)",
                 clipPath: "polygon(0 0, 50% 54%, 100% 0, 100% 100%, 0 100%)",
                 opacity: 0.7,
                 zIndex: 1,
               }}
             />
 
-            {/* Side flaps */}
+            {/* Side flaps — subtle sage shadow */}
             <div
-              className="absolute inset-0 rounded-[6px] pointer-events-none"
+              className="absolute inset-0 rounded-[6px] pointer-events-none transition-transform duration-500 group-hover:scale-[1.01]"
               style={{
                 background:
-                  "linear-gradient(to right, rgba(25,20,50,0.9) 0%, transparent 40%, transparent 60%, rgba(25,20,50,0.9) 100%)",
+                  "linear-gradient(to right, rgba(60,85,65,0.9) 0%, transparent 40%, transparent 60%, rgba(60,85,65,0.9) 100%)",
                 clipPath: "polygon(0 0, 50% 56%, 100% 0, 100% 100%, 0 100%)",
                 zIndex: 2,
               }}
@@ -159,16 +191,16 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
 
             {/* Bottom flap */}
             <div
-              className="absolute inset-0 rounded-b-[6px] pointer-events-none"
+              className="absolute inset-0 rounded-b-[6px] pointer-events-none transition-transform duration-500 group-hover:scale-[1.01]"
               style={{
-                background: "linear-gradient(to top, rgba(15,12,35,0.95) 0%, rgba(25,20,50,0.7) 35%, transparent 100%)",
+                background: "linear-gradient(to top, rgba(50,75,55,0.95) 0%, rgba(60,85,65,0.7) 35%, transparent 100%)",
                 clipPath: "polygon(0 100%, 50% 54%, 100% 100%)",
                 zIndex: 2,
               }}
             />
 
-            {/* Decorative envelope lines */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-[6px]" style={{ zIndex: 3 }}>
+            {/* Decorative envelope gold lines */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-[6px] transition-transform duration-500 group-hover:scale-[1.01]" style={{ zIndex: 3 }}>
               <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 420 300" fill="none">
                 <line x1="0" y1="0" x2="210" y2="162" stroke="#c5a059" strokeWidth="0.5" />
                 <line x1="420" y1="0" x2="210" y2="162" stroke="#c5a059" strokeWidth="0.5" />
@@ -177,7 +209,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               </svg>
             </div>
 
-            {/* ── CARD (z-10) — sits ABOVE the flap always ── */}
+            {/* ── CARD (z-10) — cream invitation card ── */}
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={
@@ -186,7 +218,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
                   : { y: 20, opacity: 0 }
               }
               transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-x-6 shadow-[0_16px_50px_rgba(0,0,0,0.55)] rounded-sm"
+              className="absolute inset-x-6 shadow-[0_16px_50px_rgba(0,0,0,0.25)] rounded-sm"
               style={{
                 top: 28,
                 bottom: 28,
@@ -197,7 +229,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               <div className="absolute inset-3 border border-[#c5a059]/35 pointer-events-none rounded-sm" />
               <div className="absolute inset-[13px] border-[0.5px] border-[#c5a059]/18 pointer-events-none rounded-sm" />
               {["top-3 left-3", "top-3 right-3", "bottom-3 left-3", "bottom-3 right-3"].map((pos, i) => (
-                <div key={i} className={`absolute ${pos} text-[#c5a059]/40 text-xl leading-none pointer-events-none select-none`}>✦</div>
+                <div key={`star-${i}`} className={`absolute ${pos} text-[#c5a059]/40 text-xl leading-none pointer-events-none select-none`}>✦</div>
               ))}
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 px-8 text-center">
                 <p className="font-serif text-[8px] tracking-[0.35em] uppercase text-[#c5a059]/60">Together with their families</p>
@@ -218,9 +250,9 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               </div>
             </motion.div>
 
-            {/* ── TOP FLAP (z-5) — BEHIND the card ── */}
+            {/* ── TOP FLAP (z-5) — sage green flap ── */}
             <motion.div
-              className="absolute top-0 left-0 right-0 origin-top overflow-hidden"
+              className="absolute top-0 left-0 right-0 origin-top overflow-hidden transition-transform duration-500 group-hover:scale-[1.01]"
               style={{
                 height: "56%",
                 transformStyle: "preserve-3d",
@@ -234,9 +266,9 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               <div
                 className="absolute inset-0"
                 style={{
-                  background: "linear-gradient(160deg, #352a65 0%, #221b4a 100%)",
+                  background: "linear-gradient(160deg, #8aaa94 0%, #6a8a74 100%)",
                   clipPath: "polygon(0 0, 100% 0, 50% 100%)",
-                  boxShadow: "inset 0 -8px 18px rgba(0,0,0,0.3)",
+                  boxShadow: "inset 0 -8px 18px rgba(0,0,0,0.15)",
                 }}
               />
               <svg className="absolute inset-0 w-full h-full opacity-15" viewBox="0 0 420 168" fill="none">
@@ -245,9 +277,9 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               </svg>
             </motion.div>
 
-            {/* ── WAX SEAL (z-6) ── */}
+            {/* ── WAX SEAL (z-6) — gold seal ── */}
             <motion.div
-              className="absolute"
+              className="absolute transition-transform duration-500 group-hover:scale-105"
               style={{ top: "42%", left: "50%", x: "-50%", y: "-50%", zIndex: 6 }}
               animate={
                 phase !== "idle"
@@ -256,10 +288,11 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               }
               transition={{ duration: 0.3, ease: "backIn" }}
             >
-              <div className="absolute inset-0 rounded-full bg-[#8b1a1a]/30 blur-[10px] scale-110" />
-              <div className="w-[76px] h-[76px] rounded-full border-4 border-[#7a1a1a] bg-gradient-to-br from-[#a03030] to-[#7a1515] shadow-[0_6px_24px_rgba(120,30,30,0.6)] flex items-center justify-center">
-                <div className="w-[58px] h-[58px] rounded-full border border-[#c06060]/40 flex items-center justify-center">
-                  <span className="script-text text-[#f0d090] text-2xl leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+              <div className="absolute inset-0 rounded-full bg-[#c5a059]/30 blur-[10px] scale-110" />
+              <div className="w-[76px] h-[76px] rounded-full border-[3px] border-[#a08040] bg-gradient-to-br from-[#c5a059] to-[#9a7a3a] shadow-[0_6px_24px_rgba(160,128,64,0.5)] flex items-center justify-center">
+                <div className="w-[60px] h-[60px] rounded-full border border-[#f5d890]/40 flex items-center justify-center bg-gradient-to-br from-[#d4b870] to-[#b3914a]">
+                  {/* Changed typography to serif for a more elegant, modern look instead of script */}
+                  <span className="font-serif italic text-white text-[22px] tracking-[0.1em] font-medium leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
                     M&H
                   </span>
                 </div>
@@ -277,11 +310,11 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
                 animate={{ y: [0, 7, 0] }}
                 transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
               >
-                <svg width="20" height="12" viewBox="0 0 20 12" fill="none" className="text-[#c5a059] opacity-60">
+                <svg width="20" height="12" viewBox="0 0 20 12" fill="none" className="text-[#c5a059] opacity-80">
                   <path d="M 1 1 L 10 10 L 19 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
               </motion.div>
-              <p className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-serif">
+              <p className="text-[10px] uppercase tracking-[0.4em] text-[#667866]/70 font-serif font-medium">
                 Open Your Invitation
               </p>
             </motion.div>
@@ -298,8 +331,8 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.7 }}
               >
-                <p className="text-white/40 text-[10px] uppercase tracking-[0.4em] font-serif mb-2">You are invited</p>
-                <p className="script-text text-5xl text-white/90 drop-shadow-[0_2px_12px_rgba(197,160,89,0.5)]">
+                <p className="text-[#667866]/50 text-[10px] uppercase tracking-[0.4em] font-serif mb-2">You are invited</p>
+                <p className="script-text text-5xl text-[#667866] drop-shadow-[0_2px_12px_rgba(197,160,89,0.3)]">
                   Mignone & Hamza
                 </p>
               </motion.div>
