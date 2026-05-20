@@ -246,14 +246,18 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               {["top-3 left-3", "top-3 right-3", "bottom-3 left-3", "bottom-3 right-3"].map((pos, i) => (
                 <div key={`star-${i}`} className={`absolute ${pos} text-[#c5a059]/40 text-xl leading-none pointer-events-none select-none`}>✦</div>
               ))}
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-[6px] px-12 py-8 text-center">
-                <p className="font-serif text-[7px] tracking-[0.35em] uppercase text-[#c5a059]/60">Together with their families</p>
-                <div className="w-10 h-px bg-[#c5a059]/30 my-[2px]" />
-                <p className="font-serif text-[7px] tracking-[0.25em] uppercase text-[#7a9a84]/60">invite you to the wedding of</p>
-                <p className="script-text text-[32px] text-[#4a7561] leading-none mt-1">Mignone</p>
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-[4px] px-12 py-8 text-center">
+                <div className="flex flex-col items-center gap-[2px]">
+                  <p className="font-serif text-[6.5px] tracking-[0.2em] uppercase text-[#c5a059]/70">The family of Innocent Kanobana</p>
+                  <p className="font-serif text-[6.5px] tracking-[0.2em] uppercase text-[#c5a059]/70">& Issa Mpamo</p>
+                </div>
+                <div className="w-10 h-px bg-[#c5a059]/30 my-[1px]" />
+                <p className="font-serif text-[6px] tracking-[0.15em] uppercase text-[#7a9a84]/70 max-w-[200px]">joyfully invite you to the wedding of their beloved children</p>
+                <p className="script-text text-[32px] text-[#4a7561] leading-none mt-1">Clarisse</p>
+                <p className="font-serif text-[7px] text-[#7a9a84]/50 tracking-[0.05em] uppercase -mt-1">(Mignone)</p>
                 <p className="font-serif text-[#c5a059]/55 text-xs tracking-widest">&</p>
-                <p className="script-text text-[32px] text-[#4a7561] leading-none mb-1">Hamza</p>
-                <div className="w-10 h-px bg-[#c5a059]/30 my-[2px]" />
+                <p className="script-text text-[32px] text-[#4a7561] leading-none mb-1">Amzan</p>
+                <div className="w-10 h-px bg-[#c5a059]/30 my-[1px]" />
                 <div className="flex items-center gap-2">
                   <span className="font-serif text-[12px] text-[#4a7561]/70">16</span>
                   <span className="text-[#c5a059]/40 text-[9px]">/</span>
@@ -307,7 +311,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               <div className="w-[76px] h-[76px] rounded-full border-[3px] border-[#a08040] bg-gradient-to-br from-[#c5a059] to-[#9a7a3a] shadow-[0_6px_24px_rgba(160,128,64,0.5)] flex items-center justify-center">
                 <div className="w-[60px] h-[60px] rounded-full border border-[#f5d890]/40 flex items-center justify-center bg-gradient-to-br from-[#d4b870] to-[#b3914a]">
                   <span className="font-serif italic text-white text-[22px] tracking-[0.1em] font-medium leading-none drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]">
-                    M&H
+                    M&A
                   </span>
                 </div>
               </div>
@@ -347,7 +351,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               >
                 <p className="text-[#667866]/50 text-[10px] uppercase tracking-[0.4em] font-serif mb-2">You are invited</p>
                 <p className="script-text text-5xl text-[#667866] drop-shadow-[0_2px_12px_rgba(197,160,89,0.3)]">
-                  Mignone & Hamza
+                  Clarisse & Amzan
                 </p>
               </motion.div>
             )}

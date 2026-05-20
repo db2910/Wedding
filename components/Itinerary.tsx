@@ -3,40 +3,32 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Church, Wine, UtensilsCrossed, Music } from "lucide-react";
+import { Church, Wine, Users } from "lucide-react";
 
 const events = [
   {
-    time: "8:00 AM",
-    title: "Wedding Ceremony",
-    description: "A sacred and intimate morning ceremony as they exchange their vows before God and their loved ones.",
+    time: "09:00 AM",
+    title: "Introduction & Dowry",
+    description: "Introduction and Dowry giving at Golden Garden Rebero.",
+    icon: Users,
+    color: "text-sage",
+    bg: "bg-sage/10",
+  },
+  {
+    time: "03:00 PM",
+    title: "Vows & Ceremony",
+    description: "A sacred and intimate ceremony as they exchange their vows before God and their loved ones.",
     icon: Church,
-    color: "text-sage",
-    bg: "bg-sage/10",
+    color: "text-gold",
+    bg: "bg-gold/10",
   },
   {
-    time: "10:30 AM",
-    title: "Garden Reception",
-    description: "Mingle with family & friends over refreshments and light music in the beautiful garden terrace.",
+    time: "05:00 PM",
+    title: "Wedding Reception",
+    description: "The reception will be held at Golden Garden Rebero to celebrate the new couple with family and friends.",
     icon: Wine,
-    color: "text-gold",
-    bg: "bg-gold/10",
-  },
-  {
-    time: "12:30 PM",
-    title: "Wedding Lunch",
-    description: "A celebratory feast with curated dishes to toast the new couple at Golden Garden Rebero.",
-    icon: UtensilsCrossed,
     color: "text-sage",
     bg: "bg-sage/10",
-  },
-  {
-    time: "3:00 PM",
-    title: "Cake & Dance",
-    description: "Celebrating with a cake cutting followed by dancing to favorite hits as the sun begins to set.",
-    icon: Music,
-    color: "text-gold",
-    bg: "bg-gold/10",
   },
 ];
 

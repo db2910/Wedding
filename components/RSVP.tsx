@@ -182,7 +182,7 @@ export default function RSVP() {
                 </h3>
                 <textarea
                   className={`${inputClass} resize-none h-32`}
-                  placeholder="Share your warm wishes with Mignone & Hamza…"
+                  placeholder="Share your warm wishes with Mignone & Amzan…"
                   value={form.message}
                   onChange={(e) => update("message", e.target.value)}
                 />

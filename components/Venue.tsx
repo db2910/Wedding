@@ -50,10 +50,13 @@ export default function Venue() {
 
             <div className="border-l-2 border-gold/25 pl-5 space-y-4 ml-6">
               <p className="text-base text-sage/75 leading-relaxed">
-                <span className="text-gold font-medium">Ceremony:</span> Garden Grounds, 3:00 PM
+                <span className="text-gold font-medium">Introduction & Dowry:</span> 09:00 AM
               </p>
               <p className="text-base text-sage/75 leading-relaxed">
-                <span className="text-gold font-medium">Reception:</span> Main Hall, 5:00 PM
+                <span className="text-gold font-medium">Vows:</span> 03:00 PM
+              </p>
+              <p className="text-base text-sage/75 leading-relaxed">
+                <span className="text-gold font-medium">Reception:</span> 05:00 PM
               </p>
               <p className="text-base text-sage/75 leading-relaxed">
                 <span className="text-gold font-medium">Parking:</span> Complimentary on-site parking available

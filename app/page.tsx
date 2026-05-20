@@ -81,7 +81,7 @@ export default function Home() {
               <SectionDivider variant="ornament" />
             </div>
             <footer className="py-10 text-center bg-sage/5 border-t border-gold/10">
-              <p className="script-text text-3xl text-gold mb-2">Mignone & Hamza</p>
+              <p className="script-text text-3xl text-gold mb-2">Mignone & Amzan</p>
               <p className="text-xs uppercase tracking-widest text-sage/40">
                 August 16, 2026 · Kigali, Rwanda
               </p>

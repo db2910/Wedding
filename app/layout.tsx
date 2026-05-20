@@ -24,8 +24,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Mignone & Hamza | Wedding Invitation",
-  description: "Join us in Kigali to celebrate the wedding of Mignone & Hamza.",
+  title: "Mignone & Amzan | Wedding Invitation",
+  description: "Join us in Kigali to celebrate the wedding of Mignone & Amzan.",
 };
 
 export default function RootLayout({

@@ -31,7 +31,7 @@ export default function Gifts() {
             <div className="w-12 h-12 rounded-full bg-sage/5 flex items-center justify-center">
               <Gift className="w-5 h-5 text-sage" />
             </div>
-            <h3 className="font-serif text-2xl text-sage">Mignone</h3>
+            <h3 className="font-serif text-2xl text-sage">Clarisse (Mignone)</h3>
             <p className="text-sm uppercase tracking-widest text-gold font-medium">Mobile Money</p>
             <div className="flex flex-col items-center gap-2 w-full mt-2">
               <div className="flex items-center gap-2 text-sage/80 bg-white/50 px-4 py-2 rounded-lg border border-sage/10 w-full justify-center">
@@ -40,7 +40,7 @@ export default function Gifts() {
               </div>
               <div className="flex items-center gap-2 text-sage/80 bg-white/50 px-4 py-2 rounded-lg border border-sage/10 w-full justify-center">
                 <Phone className="w-4 h-4" />
-                <span className="font-medium tracking-wide">0786 406 677</span>
+                <span className="font-medium tracking-wide">0788 588 609</span>
               </div>
             </div>
           </motion.div>
@@ -54,7 +54,7 @@ export default function Gifts() {
             <div className="w-12 h-12 rounded-full bg-sage/5 flex items-center justify-center">
               <Gift className="w-5 h-5 text-sage" />
             </div>
-            <h3 className="font-serif text-2xl text-sage">Hamza</h3>
+            <h3 className="font-serif text-2xl text-sage">Amzan</h3>
             <p className="text-sm uppercase tracking-widest text-gold font-medium">Mobile Money</p>
             <div className="flex flex-col items-center gap-2 w-full mt-2">
               <div className="flex items-center gap-2 text-sage/80 bg-white/50 px-4 py-2 rounded-lg border border-sage/10 w-full justify-center">
