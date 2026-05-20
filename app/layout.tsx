@@ -24,26 +24,20 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
+  ),
   title: "Mignone & Amzan | Wedding Invitation",
   description: "Join us in Kigali to celebrate the wedding of Mignone & Amzan.",
   openGraph: {
     title: "Mignone & Amzan | Wedding Invitation",
     description: "Join us in Kigali to celebrate the wedding of Mignone & Amzan.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 1200,
-        alt: "Mignone & Amzan Wedding Invitation",
-      },
-    ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Mignone & Amzan | Wedding Invitation",
     description: "Join us in Kigali to celebrate the wedding of Mignone & Amzan.",
-    images: ["/og-image.png"],
   },
 };
 
