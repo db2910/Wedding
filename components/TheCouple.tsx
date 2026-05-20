@@ -23,9 +23,9 @@ function AnimatedSection({ children, className = "" }: { children: React.ReactNo
 const profiles = [
   {
     role: "The Bride",
-    name: "Clarisse (Mignone)",
+    name: "Mignone",
     tagline: "Graceful, Radiant & Full of Light",
-    bio: "A lover of sunsets, great music, and meaningful conversations. Clarisse (Mignone) brings warmth into every room she enters and light into every heart she touches.",
+    bio: "A lover of sunsets, great music, and meaningful conversations. Mignone brings warmth into every room she enters and light into every heart she touches.",
     photo: "/Bride.jpeg",
     accent: "border-sage/30",
     accentBg: "from-sage/5 to-transparent",

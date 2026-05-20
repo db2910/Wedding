@@ -253,8 +253,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
                 </div>
                 <div className="w-10 h-px bg-[#c5a059]/30 my-[1px]" />
                 <p className="font-serif text-[6px] tracking-[0.15em] uppercase text-[#7a9a84]/70 max-w-[200px]">joyfully invite you to the wedding of their beloved children</p>
-                <p className="script-text text-[32px] text-[#4a7561] leading-none mt-1">Clarisse</p>
-                <p className="font-serif text-[7px] text-[#7a9a84]/50 tracking-[0.05em] uppercase -mt-1">(Mignone)</p>
+                <p className="script-text text-[32px] text-[#4a7561] leading-none mt-1">Mignone</p>
                 <p className="font-serif text-[#c5a059]/55 text-xs tracking-widest">&</p>
                 <p className="script-text text-[32px] text-[#4a7561] leading-none mb-1">Amzan</p>
                 <div className="w-10 h-px bg-[#c5a059]/30 my-[1px]" />
@@ -351,7 +350,7 @@ export default function Envelope({ onOpen }: { onOpen: () => void }) {
               >
                 <p className="text-[#667866]/50 text-[10px] uppercase tracking-[0.4em] font-serif mb-2">You are invited</p>
                 <p className="script-text text-5xl text-[#667866] drop-shadow-[0_2px_12px_rgba(197,160,89,0.3)]">
-                  Clarisse & Amzan
+                  Mignone & Amzan
                 </p>
               </motion.div>
             )}
