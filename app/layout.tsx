@@ -48,9 +48,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${greatVibes.variable} ${cinzel.variable} ${playfair.variable} antialiased`}>
-      <head>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      </head>
       <body>
         {children}
       </body>

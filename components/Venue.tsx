@@ -1,10 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { MapPin, Navigation } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { MapPin, Navigation, X } from "lucide-react";
 import PhotoSlideshow from "./PhotoSlideshow";
 
 export default function Venue() {
+  const [showPalette, setShowPalette] = useState(false);
   const mapsLink = "https://www.google.com/maps/search/?api=1&query=Golden+Garden+Rebero+Kigali+Rwanda";
 
   return (
@@ -61,9 +63,22 @@ export default function Venue() {
               <p className="text-base text-sage/75 leading-relaxed">
                 <span className="text-gold font-medium">Parking:</span> Complimentary on-site parking available
               </p>
-              <p className="text-base text-sage/75 leading-relaxed">
-                <span className="text-gold font-medium">Dress Code:</span> Black Tie / Formal Attire
-              </p>
+              <div className="flex items-center gap-3 flex-wrap">
+                <p className="text-base text-sage/75 leading-relaxed">
+                  <span className="text-gold font-medium">Dress Code:</span> Black Tie / Formal Attire
+                </p>
+                <button
+                  onClick={() => setShowPalette(true)}
+                  className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-gold/30 bg-gold/5 hover:bg-gold/10 transition-colors"
+                >
+                  <img
+                    src="/dress-code-palette.jpeg"
+                    alt="Wedding color palette"
+                    className="w-7 h-7 rounded-full object-cover border border-gold/40"
+                  />
+                  <span className="text-xs uppercase tracking-widest text-gold">See Colors</span>
+                </button>
+              </div>
             </div>
 
             <motion.a
@@ -115,6 +130,45 @@ export default function Venue() {
           <PhotoSlideshow />
         </motion.div>
       </div>
+
+      {/* Dress code palette lightbox */}
+      <AnimatePresence>
+        {showPalette && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm px-4"
+            onClick={() => setShowPalette(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.85, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.85, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="relative max-w-md w-full max-h-[85vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src="/dress-code-palette.jpeg"
+                alt="Wedding color palette"
+                className="w-full h-full object-contain rounded-xl shadow-2xl"
+                style={{ maxHeight: "80vh" }}
+              />
+              <p className="text-center text-white/70 text-xs uppercase tracking-widest mt-3 font-serif">
+                Please dress in these colors
+              </p>
+              <button
+                onClick={() => setShowPalette(false)}
+                className="absolute top-3 right-3 bg-black/50 hover:bg-black/80 text-white rounded-full p-2 transition-colors backdrop-blur-sm border border-white/20"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
