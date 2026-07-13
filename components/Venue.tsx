@@ -63,22 +63,9 @@ export default function Venue() {
               <p className="text-base text-sage/75 leading-relaxed">
                 <span className="text-gold font-medium">Parking:</span> Complimentary on-site parking available
               </p>
-              <div className="flex items-center gap-3 flex-wrap">
-                <p className="text-base text-sage/75 leading-relaxed">
-                  <span className="text-gold font-medium">Dress Code:</span> Black Tie / Formal Attire
-                </p>
-                <button
-                  onClick={() => setShowPalette(true)}
-                  className="flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border border-gold/30 bg-gold/5 hover:bg-gold/10 transition-colors"
-                >
-                  <img
-                    src="/dress-code-palette.jpeg"
-                    alt="Wedding color palette"
-                    className="w-7 h-7 rounded-full object-cover border border-gold/40"
-                  />
-                  <span className="text-xs uppercase tracking-widest text-gold">See Colors</span>
-                </button>
-              </div>
+              <p className="text-base text-sage/75 leading-relaxed">
+                <span className="text-gold font-medium">Dress Code:</span> Black Tie / Formal Attire — see color palette below
+              </p>
             </div>
 
             <motion.a
@@ -113,6 +100,34 @@ export default function Venue() {
             />
           </motion.div>
         </div>
+
+        {/* Dress Code / Color Palette */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
+          className="mt-24"
+        >
+          <div className="text-center mb-10">
+            <p className="text-xs uppercase tracking-[0.35em] text-gold mb-4 font-medium">Attire</p>
+            <h3 className="font-serif text-4xl text-sage">Dress Code</h3>
+            <div className="w-12 h-px bg-gold/30 mx-auto mt-5 mb-5" />
+            <p className="text-sage/65 text-base max-w-md mx-auto">
+              We'd love to see you in these colors — tap the image to view it full size.
+            </p>
+          </div>
+          <button
+            onClick={() => setShowPalette(true)}
+            className="block mx-auto max-w-sm w-full rounded-2xl overflow-hidden shadow-xl border border-gold/20 hover:scale-[1.02] transition-transform"
+          >
+            <img
+              src="/dress-code-palette.jpeg"
+              alt="Wedding color palette — please dress in these colors"
+              className="w-full h-auto"
+            />
+          </button>
+        </motion.div>
 
         {/* Photo Slideshow Section */}
         <motion.div
