@@ -23,9 +23,11 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
 });
 
+const SITE_URL = "https://wedding-tau-coral.vercel.app";
+
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
+    process.env.NODE_ENV === "development" ? "http://localhost:3000" : SITE_URL
   ),
   title: "Mignone & Amzan | Wedding Invitation",
   description: "Join us in Kigali to celebrate the wedding of Mignone & Amzan.",
