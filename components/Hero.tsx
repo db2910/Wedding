@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 
 const WEDDING_DATE = new Date("2026-08-16T09:00:00");
 
@@ -34,10 +35,17 @@ function CountUnit({ value, label }: { value: number; label: string }) {
 
 export default function Hero() {
   const [timeLeft, setTimeLeft] = useState(getTimeLeft());
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => setTimeLeft(getTimeLeft()), 1000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setHasScrolled(window.scrollY > 80);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
@@ -138,22 +146,32 @@ export default function Hero() {
           <span className="text-white/40 text-xl md:text-3xl mt-3 md:mt-5 font-light">:</span>
           <CountUnit value={timeLeft.seconds} label="Secs" />
         </motion.div>
-
-        {/* Scroll cue */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.8 }}
-          className="mt-10 md:mt-14 flex flex-col items-center gap-1.5 text-white/50"
-        >
-          <span className="text-[9px] md:text-[10px] uppercase tracking-[0.3em]">Scroll</span>
-          <motion.div
-            animate={{ y: [0, 5, 0] }}
-            transition={{ repeat: Infinity, duration: 1.5 }}
-            className="w-px h-8 md:h-10 bg-gradient-to-b from-white/50 to-transparent"
-          />
-        </motion.div>
       </div>
+
+      {/* Scroll cue — fixed to the actual viewport bottom so it stays visible
+          even when hero content overflows a shorter screen, and fades once scrolling starts */}
+      <AnimatePresence>
+        {!hasScrolled && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ delay: 1.8 }}
+            className="fixed bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1.5 text-white/80 pointer-events-none"
+          >
+            <span className="text-[9px] md:text-[10px] uppercase tracking-[0.35em] drop-shadow-md">
+              Scroll to discover
+            </span>
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ repeat: Infinity, duration: 1.6 }}
+              className="glass rounded-full p-1.5"
+            >
+              <ChevronDown className="w-4 h-4 md:w-5 md:h-5 text-white drop-shadow-md" />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

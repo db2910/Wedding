@@ -16,6 +16,9 @@ const photos = [
   { src: "/couple-9.jpeg", caption: "Hand in Hand" },
   { src: "/couple-10.jpeg", caption: "Heart & Soul" },
   { src: "/couple-11.jpeg", caption: "Forever & Always" },
+  { src: "/IMG_3046.JPG", caption: "Civil Wedding" },
+  { src: "/IMG_3047.JPG", caption: "Nikah" },
+  { src: "/IMG_3050.JPG", caption: "Sealed With Love" },
 ];
 
 // Duplicate for seamless infinite loop
